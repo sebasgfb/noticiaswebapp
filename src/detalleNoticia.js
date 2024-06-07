@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator, FlatList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import Comentarios from './comentarios';
 
 const DetalleNoticia = ({ route }) => {
   const { id } = route.params;
   const [noticia, setNoticia] = useState(null);
   const [listaGrupos, setListaGrupos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [comentariosVisibles, setComentariosVisibles] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   const [sinConexion, setSinConexion] = useState(false);
 
   const obtenerNombreGrupo = (grupoId) => {
@@ -22,21 +21,16 @@ const DetalleNoticia = ({ route }) => {
     return date.toLocaleDateString('es-ES', options);
   };
 
-  const obtenerNombreAutor = (autorId) => {
-    const autor = usuarios.find((usuario) => usuario.id === autorId);
-    return autor ? autor.nombre : 'Autor desconocido';
-  };
-
   useEffect(() => {
     axios
       .get(`http://localhost:8000/listanoticias/${id}`)
       .then((response) => {
         setNoticia(response.data);
-        setLoading(false); 
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching news details:', error);
-        setLoading(false); 
+        setLoading(false);
         setSinConexion(true);
       });
 
@@ -47,27 +41,6 @@ const DetalleNoticia = ({ route }) => {
       })
       .catch((error) => {
         console.error('Error fetching groups:', error);
-        setSinConexion(true);
-      });
-
-    axios
-      .get('http://localhost:8000/listacomentarios')
-      .then((response) => {
-        const comentarios = response.data.filter((comentario) => comentario.noticia === id && comentario.visible);
-        setComentariosVisibles(comentarios);
-      })
-      .catch((error) => {
-        console.error('Error fetching comments:', error);
-        setSinConexion(true);
-      });
-
-    axios
-      .get('http://localhost:8000/listausuarios')
-      .then((response) => {
-        setUsuarios(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching users:', error);
         setSinConexion(true);
       });
   }, [id]);
@@ -93,18 +66,7 @@ const DetalleNoticia = ({ route }) => {
         <Text style={styles.grupo}>{obtenerNombreGrupo(noticia.grupo)}</Text>
         <Text style={styles.contenido}>{noticia.cuerpo}</Text>
         <Text style={styles.subtitulo}>Comentarios</Text>
-        <FlatList
-          data={comentariosVisibles}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.tarjeta}>
-              <View style={styles.textoContainer}>
-                <Text style={styles.autor}>{obtenerNombreAutor(item.autor)} - {formatDate(item.fecha)}</Text>
-                <Text style={styles.comentario}>{item.cuerpo}</Text>
-              </View>
-            </View>
-          )}
-        />
+        <Comentarios noticiaId={id} />
       </ScrollView>
     </View>
   );
@@ -154,32 +116,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
-  },
-  tarjeta: {
-    margin: 8,
-    padding: 10,
-    backgroundColor: "#FFF",
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  textoContainer: {
-    marginLeft: 10,
-  },
-  autor: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginTop: 5,
-  },
-  comentario: {
-    fontSize: 15,
-    lineHeight: 22,
   },
 });
 
