@@ -20,7 +20,7 @@ class ListaPost extends Component {
   }
 
   componentDidMount() {
-    axios.get("http://localhost:8000/listanoticias")
+    axios.get("http://localhost:8000/listanoticias/")
       .then(response => {
         this.setState({ listaNoticias: response.data });
       })
@@ -28,7 +28,7 @@ class ListaPost extends Component {
         this.setState({ sinConexion: true });
       });
 
-    axios.get("http://localhost:8000/listagrupos")
+    axios.get("http://localhost:8000/listagrupos/")
       .then(response => {
         const grupos = {};
         response.data.forEach(grupo => {

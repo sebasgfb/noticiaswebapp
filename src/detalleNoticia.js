@@ -23,7 +23,7 @@ const DetalleNoticia = ({ route }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/listanoticias/${id}`)
+      .get(`http://localhost:8000/listanoticias/${id}/`)
       .then((response) => {
         setNoticia(response.data);
         setLoading(false);
@@ -35,7 +35,7 @@ const DetalleNoticia = ({ route }) => {
       });
 
     axios
-      .get('http://localhost:8000/listagrupos')
+      .get('http://localhost:8000/listagrupos/')
       .then((response) => {
         setListaGrupos(response.data);
       })

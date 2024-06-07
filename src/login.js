@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation }) => {
     setError('');
 
     try {
-      const response = await axios.get('http://localhost:8000/listausuarios');
+      const response = await axios.get('http://localhost:8000/listausuarios/');
       const users = response.data;
 
       const user = users.find(user => user.usuario === username && user.clave === password);

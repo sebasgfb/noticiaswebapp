@@ -21,7 +21,7 @@ const Comentarios = ({ noticiaId }) => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/listacomentarios')
+      .get('http://localhost:8000/listacomentarios/')
       .then((response) => {
         const comentarios = response.data.filter((comentario) => comentario.noticia === noticiaId && comentario.visible);
         setComentariosVisibles(comentarios);
@@ -34,7 +34,7 @@ const Comentarios = ({ noticiaId }) => {
       });
 
     axios
-      .get('http://localhost:8000/listausuarios')
+      .get('http://localhost:8000/listausuarios/')
       .then((response) => {
         setUsuarios(response.data);
       })
