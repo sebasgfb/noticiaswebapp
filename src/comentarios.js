@@ -53,7 +53,7 @@ const Comentarios = ({ noticiaId }) => {
   }
 
   if (sinConexion) {
-    return <View style={styles.errorContainer}><Text>Error de conexión</Text></View>;
+    return <View style={styles.errorContainer}><Text>Error de conexión, actualice la página en un momento.</Text></View>;
   }
 
   return (
